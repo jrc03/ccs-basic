@@ -1,0 +1,12 @@
+schema: "classroom50/repo-config/v1"
+classroom: "itla-pw-c3-2026"
+assignment: "css-i"
+owner:
+  username: "dawasaga"
+  id: 218013070
+  accepted_at: "2026-09-30T23:06:18Z"
+source:
+  owner: "TDHclassroom"
+  owner_id: 219900396
+  repo: "css-basico"
+  branch: "main"

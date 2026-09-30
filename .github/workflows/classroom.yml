@@ -1,0 +1,315 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: [self-hosted, oracle]
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    
+    # Cachear node_modules
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    
+    # Instalar dependencias una sola vez
+    - name: Install dependencies
+      run: npm install
+    
+    # ===========================================
+    # EJERCICIO 1 - CSS (4 tests = 8 puntos)
+    # ===========================================
+    
+    # Test 1.1: Archivo HTML existe (2 puntos)
+    - name: Ejercicio 1.1 - Archivo HTML existe
+      id: ejercicio-1-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 1.1 - Archivo HTML existe
+        setup-command: ''
+        command: npm test -- tests/ejercicio/1-css.test.js -t "El archivo HTML existe"
+        timeout: 30
+        max-score: 2
+    
+    # Test 1.2: CSS inline (2 puntos)
+    - name: Ejercicio 1.2 - CSS inline
+      id: ejercicio-1-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 1.2 - CSS inline
+        setup-command: ''
+        command: npm test -- tests/ejercicio/1-css.test.js -t "Contiene un h1 con estilo inline"
+        timeout: 30
+        max-score: 2
+    
+    # Test 1.3: Párrafo con clase (2 puntos)
+    - name: Ejercicio 1.3 - Párrafo con clase
+      id: ejercicio-1-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 1.3 - Párrafo con clase
+        setup-command: ''
+        command: npm test -- tests/ejercicio/1-css.test.js -t "Contiene un p con clase cabecera"
+        timeout: 30
+        max-score: 2
+    
+    # Test 1.4: CSS en cabecera (2 puntos)
+    - name: Ejercicio 1.4 - CSS en cabecera
+      id: ejercicio-1-4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 1.4 - CSS en cabecera
+        setup-command: ''
+        command: npm test -- tests/ejercicio/1-css.test.js -t "Contiene CSS en la cabecera para la clase cabecera"
+        timeout: 30
+        max-score: 2
+    
+    # ===========================================
+    # EJERCICIO 2 - CSS EXTERNO (17 tests = 34 puntos)
+    # ===========================================
+    
+    # Test 2.1: Archivos existen (4 puntos)
+    - name: Ejercicio 2.1 - Archivos existen
+      id: ejercicio-2-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.1 - Archivos HTML y CSS existen
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El archivo (HTML|CSS) existe"
+        timeout: 30
+        max-score: 4
+    
+    # Test 2.2: Enlace CSS (2 puntos)
+    - name: Ejercicio 2.2 - Enlace CSS
+      id: ejercicio-2-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.2 - Enlace CSS
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El archivo HTML enlaza correctamente al CSS externo"
+        timeout: 30
+        max-score: 2
+    
+    # Test 2.3: Estructura HTML (6 puntos)
+    - name: Ejercicio 2.3 - Estructura HTML
+      id: ejercicio-2-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.3 - Estructura HTML
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El HTML contiene etiqueta"
+        timeout: 30
+        max-score: 6
+    
+    # Test 2.4: Estilos header y nav (6 puntos)
+    - name: Ejercicio 2.4 - Estilos header y nav
+      id: ejercicio-2-4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.4 - Estilos header y nav
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El CSS contiene estilos para (header|nav)"
+        timeout: 30
+        max-score: 6
+    
+    # Test 2.5: Estilos enlaces (4 puntos)
+    - name: Ejercicio 2.5 - Estilos enlaces
+      id: ejercicio-2-5
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.5 - Estilos enlaces
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El CSS contiene estilos.*para enlaces"
+        timeout: 30
+        max-score: 4
+    
+    # Test 2.6: Estilos main, p y div (6 puntos)
+    - name: Ejercicio 2.6 - Estilos main, p y div
+      id: ejercicio-2-6
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.6 - Estilos main, p y div
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El CSS contiene estilos para (main|párrafos|div)"
+        timeout: 30
+        max-score: 6
+    
+    # Test 2.7: Estilos hover (2 puntos)
+    - name: Ejercicio 2.7 - Estilos hover
+      id: ejercicio-2-7
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.7 - Estilos hover
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js -t "El CSS contiene estilos hover"
+        timeout: 30
+        max-score: 2
+    
+    # Test 2.8: Estilos restantes (4 puntos)
+    - name: Ejercicio 2.8 - Estilos restantes
+      id: ejercicio-2-8
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 2.8 - Estilos restantes
+        setup-command: ''
+        command: npm test -- tests/ejercicio/2-css-externo.test.js
+        timeout: 30
+        max-score: 4
+    
+    # ===========================================
+    # EJERCICIO 3 - SELECTORES CSS (24 tests = 58 puntos)
+    # ===========================================
+    
+    # Test 3.1: Archivos existen (4 puntos)
+    - name: Ejercicio 3.1 - Archivos existen
+      id: ejercicio-3-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.1 - Archivos HTML y CSS existen
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El archivo (HTML|CSS) existe"
+        timeout: 30
+        max-score: 4
+    
+    # Test 3.2: Enlace CSS (2 puntos)
+    - name: Ejercicio 3.2 - Enlace CSS
+      id: ejercicio-3-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.2 - Enlace CSS
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El archivo HTML enlaza correctamente al CSS"
+        timeout: 30
+        max-score: 2
+    
+    # Test 3.3: Estructura HTML básica (6 puntos)
+    - name: Ejercicio 3.3 - Estructura HTML básica
+      id: ejercicio-3-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.3 - Estructura HTML básica
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El HTML contiene (título|párrafo con clase|div con ID)"
+        timeout: 30
+        max-score: 6
+    
+    # Test 3.4: Contenedor y listas (6 puntos)
+    - name: Ejercicio 3.4 - Contenedor y listas
+      id: ejercicio-3-4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.4 - Contenedor y listas
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El HTML contiene (párrafo dentro|lista|elementos li|input|párrafo normal)"
+        timeout: 30
+        max-score: 6
+
+    # Test 3.5: Estilos h1 y clase (4 puntos)
+    - name: Ejercicio 3.5 - Estilos h1 y clase
+      id: ejercicio-3-5
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.5 - Estilos h1 y clase
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El CSS contiene estilos para (h1|clase destacado)"
+        timeout: 30
+        max-score: 4
+    
+    # Test 3.6: Estilos ID contenedor (4 puntos)
+    - name: Ejercicio 3.6 - Estilos ID contenedor
+      id: ejercicio-3-6
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.6 - Estilos ID contenedor
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El CSS contiene (estilos para el ID contenedor|selector descendente)"
+        timeout: 30
+        max-score: 4
+    
+    # Test 3.7: Selectores avanzados (6 puntos)
+    - name: Ejercicio 3.7 - Selectores avanzados
+      id: ejercicio-3-7
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.7 - Selectores avanzados
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El CSS contiene (selector hijo directo|selector de atributo|pseudo-clase)"
+        timeout: 30
+        max-score: 6
+    
+    # Test 3.8: Validación HTML (6 puntos)
+    - name: Ejercicio 3.8 - Validación HTML
+      id: ejercicio-3-8
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.8 - Validación HTML
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El HTML tiene (estructura DOCTYPE|etiqueta html|meta charset)"
+        timeout: 30
+        max-score: 6
+    
+    # Test 3.9: Verificación completa (6 puntos)
+    - name: Ejercicio 3.9 - Verificación completa
+      id: ejercicio-3-9
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.9 - Verificación completa
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js -t "El CSS usa diferentes tipos de selectores"
+        timeout: 30
+        max-score: 6
+    
+    # Test 3.10: Todos los tests del ejercicio 3 (14 puntos bonus por completar todo)
+    - name: Ejercicio 3.10 - Completar todo
+      id: ejercicio-3-10
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Ejercicio 3.10 - Completar todo
+        setup-command: ''
+        command: npm test -- tests/ejercicio/3-selectores.test.js
+        timeout: 30
+        max-score: 14
+    
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        EJERCICIO-1-1_RESULTS: "${{steps.ejercicio-1-1.outputs.result}}"
+        EJERCICIO-1-2_RESULTS: "${{steps.ejercicio-1-2.outputs.result}}"
+        EJERCICIO-1-3_RESULTS: "${{steps.ejercicio-1-3.outputs.result}}"
+        EJERCICIO-1-4_RESULTS: "${{steps.ejercicio-1-4.outputs.result}}"
+        EJERCICIO-2-1_RESULTS: "${{steps.ejercicio-2-1.outputs.result}}"
+        EJERCICIO-2-2_RESULTS: "${{steps.ejercicio-2-2.outputs.result}}"
+        EJERCICIO-2-3_RESULTS: "${{steps.ejercicio-2-3.outputs.result}}"
+        EJERCICIO-2-4_RESULTS: "${{steps.ejercicio-2-4.outputs.result}}"
+        EJERCICIO-2-5_RESULTS: "${{steps.ejercicio-2-5.outputs.result}}"
+        EJERCICIO-2-6_RESULTS: "${{steps.ejercicio-2-6.outputs.result}}"
+        EJERCICIO-2-7_RESULTS: "${{steps.ejercicio-2-7.outputs.result}}"
+        EJERCICIO-2-8_RESULTS: "${{steps.ejercicio-2-8.outputs.result}}"
+        EJERCICIO-3-1_RESULTS: "${{steps.ejercicio-3-1.outputs.result}}"
+        EJERCICIO-3-2_RESULTS: "${{steps.ejercicio-3-2.outputs.result}}"
+        EJERCICIO-3-3_RESULTS: "${{steps.ejercicio-3-3.outputs.result}}"
+        EJERCICIO-3-4_RESULTS: "${{steps.ejercicio-3-4.outputs.result}}"
+        EJERCICIO-3-5_RESULTS: "${{steps.ejercicio-3-5.outputs.result}}"
+        EJERCICIO-3-6_RESULTS: "${{steps.ejercicio-3-6.outputs.result}}"
+        EJERCICIO-3-7_RESULTS: "${{steps.ejercicio-3-7.outputs.result}}"
+        EJERCICIO-3-8_RESULTS: "${{steps.ejercicio-3-8.outputs.result}}"
+        EJERCICIO-3-9_RESULTS: "${{steps.ejercicio-3-9.outputs.result}}"
+        EJERCICIO-3-10_RESULTS: "${{steps.ejercicio-3-10.outputs.result}}"
+      with:
+        runners: ejercicio-1-1,ejercicio-1-2,ejercicio-1-3,ejercicio-1-4,ejercicio-2-1,ejercicio-2-2,ejercicio-2-3,ejercicio-2-4,ejercicio-2-5,ejercicio-2-6,ejercicio-2-7,ejercicio-2-8,ejercicio-3-1,ejercicio-3-2,ejercicio-3-3,ejercicio-3-4,ejercicio-3-5,ejercicio-3-6,ejercicio-3-7,ejercicio-3-8,ejercicio-3-9,ejercicio-3-10

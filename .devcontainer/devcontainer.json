@@ -1,0 +1,47 @@
+{
+  "name": "Node.js 22 (Slim) - CSS Básico",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+   "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/opencode,target=/home/node/.config/opencode,type=bind,consistency=cached"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bierner.markdown-mermaid",
+        "PKief.material-icon-theme",
+        "ritwickdey.LiveServer",
+        "ionutvmi.path-autocomplete",
+        "yzhang.markdown-all-in-one",
+        "bierner.markdown-preview-github-styles",
+        "esbenp.prettier-vscode",
+        "sst-dev.opencode",
+        "kwickramasekara.opencode-chat-unofficial"
+      ],
+      "settings": {
+        "liveServer.settings.port": 5500,
+        "liveServer.settings.donotShowInfoMsg": true,
+        "liveServer.settings.root": "src/",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+
+  "forwardPorts": [5500, 1948, 3000, 11434],
+  "runArgs": [
+    "--add-host", "host.docker.internal:host-gateway"
+  ],
+
+  "postCreateCommand": "npm install && npm install -g http-server",
+
+  "postStartCommand": "nohup http-server -p 5500 ${containerWorkspaceFolder}/src -c-1 > /dev/null 2>&1 & sleep 2 && echo '🚀 Servidor iniciado automáticamente en: http://localhost:5500'",
+
+  "remoteUser": "root"
+}
